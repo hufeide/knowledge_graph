@@ -47,6 +47,25 @@ class GraphStore(ABC):
         sources and are only stripped of ``source`` (not deleted).
         """
 
+    def list_sources(self) -> list[str]:
+        """Return the distinct file-level sources currently present in the graph.
+
+        Provenance entries are chunk ids of the form ``{source}-{n}`` (plus the
+        bare ``source`` on some nodes). We strip a single trailing ``-<digits>``
+        to recover the file-level name. This is the restart-safe source of truth
+        for "what has been ingested" — unlike the in-memory job registry, it
+        survives a server restart and lets the UI list / delete historical data.
+        """
+        nodes, edges = self.get_graph()
+        stems: set[str] = set()
+        for item in (*nodes, *edges):
+            for s in item.get("sources", []) or []:
+                s = str(s).strip()
+                if not s:
+                    continue
+                stems.add(re.sub(r"-\d+$", "", s))
+        return sorted(stems)
+
     # ---- shared implementations ----------------------------------------
     def stats(self) -> dict:
         nodes, edges = self.get_graph()

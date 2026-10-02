@@ -234,6 +234,17 @@ def clear_jobs():
     return {"ok": True}
 
 
+@app.get("/api/sources")
+def list_sources():
+    """List the file-level sources currently present in the persisted graph store.
+
+    Unlike the in-memory job queue (``/api/jobs``), this reflects what is actually
+    stored on disk, so it survives a server restart and lets the UI offer delete
+    actions for historical graph data even when the process has been restarted.
+    """
+    return {"sources": get_supervisor().graph_store.list_sources()}
+
+
 @app.get("/api/graph")
 def graph():
     return get_supervisor().graph_json()

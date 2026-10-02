@@ -44,7 +44,7 @@ class LLMClient:
         prompt: str,
         system: str | None = None,
         temperature: float = 0.3,
-        max_tokens: int = 2048,
+        max_tokens: int = 12048,
         json_mode: bool = False,
     ) -> str:
         messages = []
@@ -72,8 +72,8 @@ class LLMClient:
         self,
         prompt: str,
         system: str | None = None,
-        temperature: float = 0.0,
-        max_tokens: int = 4096,
+        temperature: float = 0.2,
+        max_tokens: int = 14096,
     ):
         text = self.complete(
             prompt, system=system, temperature=temperature, json_mode=True, max_tokens=max_tokens

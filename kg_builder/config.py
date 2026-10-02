@@ -96,6 +96,22 @@ class Config:
     # Default "single" to halve LLM calls; switch to "two_pass" for dense text.
     extraction_mode: str = field(default_factory=lambda: _get("EXTRACTION_MODE", "single") or "single")
 
+    # Merge the understanding (events) + extraction (entities/relations) stages into a
+    # single LLM call (run_merged), saving one LLM call per chunk. Set to false to keep
+    # the original two-stage pipeline.
+    merge_understanding_extraction: bool = field(
+        default_factory=lambda: str(_get("MERGE_UNDERSTANDING_EXTRACTION", "true")).lower()
+        in ("1", "true", "yes", "y")
+    )
+
+    # After extraction, run an LLM "correction" pass over the extracted entities/
+    # relations/events (against the original chunk text) to fix name typos, merge
+    # duplicates, and repair relation/event endpoints. Adds one LLM call per chunk.
+    extraction_correction: bool = field(
+        default_factory=lambda: str(_get("EXTRACTION_CORRECTION", "true")).lower()
+        in ("1", "true", "yes", "y")
+    )
+
     # ---- QA / GraphRAG retrieval ----------------------------------------
     # How many chunks to retrieve from the vector store per question.
     qa_top_k: int = field(default_factory=lambda: _int(_get("QA_TOP_K", "5"), 5))

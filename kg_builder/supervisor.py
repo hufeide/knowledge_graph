@@ -103,41 +103,99 @@ class Supervisor:
             graph.entities.extend(gd.entities)
             graph.relations.extend(gd.relations)
 
+        merged = self.cfg.merge_understanding_extraction
+
         if _cancelled():
             raise BuildCancelled(f"构建已取消：{source}")
 
-        if workers > 1:
-            from concurrent.futures import ThreadPoolExecutor, as_completed
+        if merged:
+            # 合并模式：一次 LLM 调用同时抽取 实体 / 关系 / 事件
+            if workers > 1:
+                from concurrent.futures import ThreadPoolExecutor, as_completed
 
-            with ThreadPoolExecutor(max_workers=workers) as ex:
-                fut_und = {
-                    ex.submit(timed, "UnderstandingAgent(语义理解)", self.understanding.run,
-                              c.text, c.source, c.id): i
-                    for i, c in enumerate(chunks)
-                }
-                fut_ext = {
-                    ex.submit(timed, "ExtractionAgent(实体/关系)", self.extraction.run,
-                              c.text, c.source, c.id): i
-                    for i, c in enumerate(chunks)
-                }
-                und, ext = {}, {}
-                for f in as_completed(fut_und):
-                    und[fut_und[f]] = f.result()
-                for f in as_completed(fut_ext):
-                    ext[fut_ext[f]] = f.result()
-            for i in range(total):
-                _collect(und[i], ext[i])
-                emit(f"② 语义理解 + ③④ 实体/关系抽取 ({i + 1}/{total}) ...")
-        else:
-            for i, c in enumerate(chunks):
-                if _cancelled():
-                    raise BuildCancelled(f"构建已取消：{source}")
-                emit(f"② 语义理解 + ③④ 实体/关系抽取 ({i + 1}/{total}) ...")
-                events = timed("UnderstandingAgent(语义理解)", self.understanding.run,
+                with ThreadPoolExecutor(max_workers=workers) as ex:
+                    fut = {
+                        ex.submit(timed, "MergedExtraction(实体/关系/事件)",
+                                  self.extraction.run_merged, c.text, c.source, c.id): i
+                        for i, c in enumerate(chunks)
+                    }
+                    res = {}
+                    for f in as_completed(fut):
+                        res[fut[f]] = f.result()
+                if self.extraction.correction:
+                    with ThreadPoolExecutor(max_workers=workers) as ex:
+                        fut_c = {
+                            ex.submit(timed, "ExtractionCorrection(修正)",
+                                      self.extraction.correct, res[i], chunks[i].text, [chunks[i].id]): i
+                            for i in range(total)
+                        }
+                        corr = {}
+                        for f in as_completed(fut_c):
+                            corr[fut_c[f]] = f.result()
+                    res = corr
+                for i in range(total):
+                    gd = res[i]
+                    _collect(gd.events, gd)
+                    emit(f"② 语义理解 + ③④ 实体/关系抽取 + ⑤ 修正 ({i + 1}/{total}) ...")
+            else:
+                for i, c in enumerate(chunks):
+                    if _cancelled():
+                        raise BuildCancelled(f"构建已取消：{source}")
+                    emit(f"② 语义理解 + ③④ 实体/关系抽取 ({i + 1}/{total}) ...")
+                    gd = timed("MergedExtraction(实体/关系/事件)", self.extraction.run_merged,
                                c.text, source=c.source, chunk_id=c.id)
-                gd = timed("ExtractionAgent(实体/关系)", self.extraction.run,
-                           c.text, source=c.source, chunk_id=c.id)
-                _collect(events, gd)
+                    if self.extraction.correction:
+                        gd = timed("ExtractionCorrection(修正)", self.extraction.correct,
+                                   gd, c.text, [c.id])
+                    _collect(gd.events, gd)
+        else:
+            # 原两段式：理解(事件) + 抽取(实体/关系)
+            if workers > 1:
+                from concurrent.futures import ThreadPoolExecutor, as_completed
+
+                with ThreadPoolExecutor(max_workers=workers) as ex:
+                    fut_und = {
+                        ex.submit(timed, "UnderstandingAgent(语义理解)", self.understanding.run,
+                                  c.text, c.source, c.id): i
+                        for i, c in enumerate(chunks)
+                    }
+                    fut_ext = {
+                        ex.submit(timed, "ExtractionAgent(实体/关系)", self.extraction.run,
+                                  c.text, c.source, c.id): i
+                        for i, c in enumerate(chunks)
+                    }
+                    und, ext = {}, {}
+                    for f in as_completed(fut_und):
+                        und[fut_und[f]] = f.result()
+                    for f in as_completed(fut_ext):
+                        ext[fut_ext[f]] = f.result()
+                if self.extraction.correction:
+                    with ThreadPoolExecutor(max_workers=workers) as ex:
+                        fut_c = {
+                            ex.submit(timed, "ExtractionCorrection(修正)",
+                                      self.extraction.correct, ext[i], chunks[i].text, [chunks[i].id]): i
+                            for i in range(total)
+                        }
+                        corr = {}
+                        for f in as_completed(fut_c):
+                            corr[fut_c[f]] = f.result()
+                    ext = corr
+                for i in range(total):
+                    _collect(und[i], ext[i])
+                    emit(f"② 语义理解 + ③④ 实体/关系抽取 + ⑤ 修正 ({i + 1}/{total}) ...")
+            else:
+                for i, c in enumerate(chunks):
+                    if _cancelled():
+                        raise BuildCancelled(f"构建已取消：{source}")
+                    emit(f"② 语义理解 + ③④ 实体/关系抽取 ({i + 1}/{total}) ...")
+                    events = timed("UnderstandingAgent(语义理解)", self.understanding.run,
+                                   c.text, source=c.source, chunk_id=c.id)
+                    gd = timed("ExtractionAgent(实体/关系)", self.extraction.run,
+                               c.text, source=c.source, chunk_id=c.id)
+                    if self.extraction.correction:
+                        gd = timed("ExtractionCorrection(修正)", self.extraction.correct,
+                                   gd, c.text, [c.id])
+                    _collect(events, gd)
 
         # Phase 2 — validation (global merge/dedup, CPU-only) overlaps the
         # independent vector-embedding step (network-bound) so both finish sooner.
