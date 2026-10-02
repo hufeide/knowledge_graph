@@ -131,6 +131,33 @@ MERGED_REL_EVENTS_PROMPT = """已知候选实体列表：
 {text}
 """
 
+# 合并抽取（单步）：一次 LLM 调用同时抽取 实体 + 关系 + 事件（不再分"实体"/"关系+事件"两步）。
+MERGED_ALL_PROMPT = """请一次性从下面的文本中抽取实体、实体间关系以及关键事件，并严格按如下 JSON 结构返回（不要输出任何解释）：
+
+{
+  "entities": [
+    {"name": "实体名", "type": "类型", "aliases": ["别名1"], "description": "一句话简述（不超过 12 字）"}
+  ],
+  "relations": [
+    {"source": "头实体名", "target": "尾实体名", "type": "关系类型(大写英文, 如 PART_OF / WORKS_FOR / CAUSES / USES / RELATED_TO)"}
+  ],
+  "events": [
+    {"type": "事件类型", "subject": "主体(实体名)", "object": "客体(实体名)", "time": "时间(如有)", "summary": "一句话摘要"}
+  ]
+}
+
+抽取原则（通用，不限领域）：
+- 实体类型建议从以下集合选取（也可自行归纳）：{types}。其中 Person=人物, Company=公司, Organization=组织/机构, Product=产品, Technology=技术/方法, Concept=概念/观点/原则, Event=事件, Location=地点, Date=时间, Metric=指标/数值, Other=其他。
+- 既抽取具体对象（人物、组织、地点、产品、技术），也抽取抽象对象（概念、方法、原则、指标）。对规则/心得/说明类文本，请提炼统领性核心概念，不要逐条罗列"第N条法则/第N步"等条目，也不要把编号本身当实体。
+- 关系的 source / target 必须来自本结果中的 entities 的 name（不得凭空造实体）；关系是图谱骨架，请只抽取真正有意义的关联。关系类型用简洁大写英文表达语义，参考：PART_OF / BELONGS_TO / WORKS_FOR / FOUNDED / LEADS / MEMBER_OF / COLLABORATES_WITH / CAUSES / INFLUENCES / DEPENDS_ON / USES / PRODUCES / PROVIDES / MENTIONS / RELATED_TO / EXPRESSES / SUPPORTS / CONTRADICTS 等。
+- 事件描述文本中发生的关键事件：谁(subject)在何时(time)对谁(object)做了什么，summary 一句话概括。subject / object 必须来自本结果中的 entities 的 name。
+- 部分实体/关系可能没有对应事件（事件稀疏属正常），请不要为了凑数而编造事件；若文本确实没有任何事件，events 返回空数组即可。
+- 控制规模：entities 不超过 20 个，relations 不超过 20 条，events 不超过 6 个；质量优先于数量。
+
+文本：
+{text}
+"""
+
 # 抽取后校正：把初步抽取结果连同原文再次交给 LLM，修正实体名/关系端点/类型等，
 # 达到"修正结果"的目的。用于 EXTRACTION_CORRECTION=true。
 EXTRACTION_CORRECTION_PROMPT = """你是一名知识图谱抽取结果的“校正”审核专家。下面给出【原文】与模型给出的【初步抽取结果 JSON】。
@@ -164,13 +191,25 @@ UNDERSTANDING_SYSTEM = (
     "理解文本语义，抽取其中表达的关键事件（谁在何时对谁做了什么）。"
 )
 
-UNDERSTANDING_PROMPT = """请理解下面文本并抽取关键事件，严格按如下 JSON 结构返回：
+UNDERSTANDING_PROMPT = """请结合下面给出的【已知实体】与【已知关系】上下文，理解文本语义并抽取关键事件，严格按如下 JSON 结构返回：
 
 {
   "events": [
     {"type": "事件类型", "subject": "主体(实体名)", "object": "客体(实体名)", "time": "时间(如有)", "summary": "一句话摘要"}
   ]
 }
+
+【已知实体】（可作为事件的 subject / object；若事件主体/客体在其中，请直接、一字不差地复用这里的名称，不要改写）：
+{entities}
+
+【已知关系】（供你理解实体间的关联，作为抽取事件的背景）：
+{relations}
+
+抽取要求：
+1. 以【已知实体】为核心，尽量抽取与之相关的事件（谁在何时对谁做了什么）。事件 subject / object 优先取自【已知实体】中的名称，这样事件才能稳定挂接进图谱。
+2. 若上述文本中还存在少量（1~3 个）【已知实体之外】的、非常重要且相对独立的事件，也可一并抽取；其 subject / object 若不在已知实体中，请使用文本中真实出现的重要概念名（系统会为其补建节点）。
+3. 只抽取文本明确表达的事件，严禁编造；若文本确实没有任何事件，返回空数组。
+4. 事件总数控制在 10 个以内，质量优先于数量。
 
 文本：
 \"\"\"

@@ -12,6 +12,7 @@ from ..prompts import (
     EXTRACTION_PROMPT,
     EXTRACTION_RELATIONS_PROMPT,
     EXTRACTION_SYSTEM,
+    MERGED_ALL_PROMPT,
     MERGED_REL_EVENTS_PROMPT,
 )
 from ..schemas import Entity, Event, GraphData, Relation
@@ -39,71 +40,58 @@ class ExtractionAgent(Agent):
         return self._run_single(t, chunk_id)
 
     # 合并抽取（MERGE_UNDERSTANDING_EXTRACTION=true）：
-    # 把"语义理解(事件)"合并进"实体关系抽取"阶段，分两步完成（保证关系/事件可靠产出，
-    # 因为该 LLM 在单次生成里只会填充第一个数组，无法一次性给出 实体+关系+事件）：
-    #   第 1 步：抽实体（紧凑）；第 2 步：给定实体名，一次抽取 关系 + 事件。
-    # 每 chunk 由原先的「理解 1 次 + 抽取两段」共 3 次调用降为 2 次。
+    # 每个 chunk 一步（单次 LLM 调用）同时抽取 实体 + 关系 + 事件，
+    # 端点对齐/补建在本地完成。部分实体/关系可能没有对应事件（事件稀疏属正常）。
+    # 相比原两段式（理解 1 次 + 抽取两段 = 3 次调用），每 chunk 降为 1 次调用。
     def run_merged(self, text: str, source: str = "", chunk_id: str = "") -> GraphData:
         if not text or not text.strip():
             return GraphData()
         t = text[:6000]
         sources = [chunk_id] if chunk_id else []
-        # 第 1 步：实体
-        e_data = self.llm.complete_json(
-            EXTRACTION_ENTITIES_PROMPT.replace("{types}", ", ".join(ENTITY_TYPES)).replace("{text}", t),
+        # 单步：一次调用同时产出 实体 + 关系 + 事件
+        data = self.llm.complete_json(
+            MERGED_ALL_PROMPT.replace("{types}", ", ".join(ENTITY_TYPES)).replace("{text}", t),
             system=EXTRACTION_SYSTEM,
         )
-        result = self._parse(e_data, sources=sources)
-        # 第 2 步：关系 + 事件（给定实体名，避免凭空造实体）
-        names = [e.name for e in result.entities]
-        if names:
-            re_data = self.llm.complete_json(
-                MERGED_REL_EVENTS_PROMPT.replace(
-                    "{entities}", "\n".join(f"- {n}" for n in names)
-                ).replace("{text}", t),
-                system=EXTRACTION_SYSTEM,
-            )
-            merged = self._parse(re_data, sources=sources)
-            # 端点对齐：模型在第 2 步常把实体名改写（如"RTX 30 系列" vs "RTX 30 系列显卡"），
-            # 直接丢弃会导致关系及其引用的实体一起被校验器判定为孤儿而丢失。这里把
-            # 关系/事件的端点对齐到已有实体（规范化 + 子串容错），缺失则补建实体。
-            entity_by_norm = {normalize_name(e.name): e.name for e in result.entities}
+        result = self._parse(data, sources=sources)
+        # 端点对齐：模型常把实体名改写（如"RTX 30 系列" vs "RTX 30 系列显卡"），
+        # 直接丢弃会导致关系/事件引用的实体一起被校验器判定为孤儿而丢失。这里把
+        # 关系/事件的端点对齐到已抽实体（规范化 + 子串容错），缺失则补建实体。
+        entity_by_norm = {normalize_name(e.name): e.name for e in result.entities}
 
-            def resolve(name: str):
-                nm = normalize_name(name)
-                if nm in entity_by_norm:
-                    return entity_by_norm[nm]
-                for en, ev in entity_by_norm.items():  # 子串容错
-                    if en and (en in nm or nm in en):
-                        return ev
+        def resolve(name: str):
+            nm = normalize_name(name)
+            if nm in entity_by_norm:
+                return entity_by_norm[nm]
+            for en, ev in entity_by_norm.items():  # 子串容错
+                if en and (en in nm or nm in en):
+                    return ev
+            return None
+
+        def ensure(name: str):
+            if not name:
                 return None
+            nm = normalize_name(name)
+            if nm in entity_by_norm:
+                return entity_by_norm[nm]
+            result.entities.append(Entity(name=name, type="Entity", sources=list(sources)))
+            entity_by_norm[nm] = name
+            return name
 
-            def ensure(name: str):
-                if not name:
-                    return None
-                nm = normalize_name(name)
-                if nm in entity_by_norm:
-                    return entity_by_norm[nm]
-                result.entities.append(Entity(name=name, type="Entity", sources=list(sources)))
-                entity_by_norm[nm] = name
-                return name
-
-            for r in merged.relations:
-                s = resolve(r.source) or ensure(r.source)
-                tg = resolve(r.target) or ensure(r.target)
-                if s and tg:
-                    r.source, r.target = s, tg
-                    result.relations.append(r)
-            for ev in merged.events:
-                if ev.subject:
-                    s = resolve(ev.subject) or ensure(ev.subject)
-                    if s:
-                        ev.subject = s
-                if ev.object:
-                    o = resolve(ev.object) or ensure(ev.object)
-                    if o:
-                        ev.object = o
-                result.events.append(ev)
+        for r in result.relations:
+            s = resolve(r.source) or ensure(r.source)
+            tg = resolve(r.target) or ensure(r.target)
+            if s and tg:
+                r.source, r.target = s, tg
+        for ev in result.events:
+            if ev.subject:
+                s = resolve(ev.subject) or ensure(ev.subject)
+                if s:
+                    ev.subject = s
+            if ev.object:
+                o = resolve(ev.object) or ensure(ev.object)
+                if o:
+                    ev.object = o
         return result
 
     # 抽取后校正：把初步抽取结果连同原文再次交给 LLM，修正实体名错别字 / 合并重复

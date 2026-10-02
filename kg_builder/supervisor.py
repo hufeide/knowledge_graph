@@ -24,8 +24,28 @@ from .agents.validator_agent import ValidatorAgent
 from .clients import EmbeddingClient, LLMClient
 from .config import PROJECT_ROOT, Config, config
 from .graph_store import GraphStore, create_graph_store
-from .schemas import GraphData
+from .schemas import Entity, GraphData
+from .utils import normalize_name
 from .vector_store import VectorStore
+
+
+def _ensure_event_entities(graph: GraphData) -> None:
+    """为事件端点中、不在已知实体集合里的主体/客体补建实体节点。
+
+    UnderstandingAgent 在抽取“已知实体之外”的其他重要事件时，可能引入文本中真实
+    存在但未被实体抽取覆盖的概念名。若不补建，这些事件会在 Validator 阶段因端点
+    无对应实体而被当作孤立事件丢弃；补建后它们既能存活，又因被事件连接而不会成为
+    孤立节点（Validator 会把事件端点也计入“已连接”集合）。
+    """
+    known = {normalize_name(e.name) for e in graph.entities}
+    for ev in graph.events:
+        for ep in (ev.subject, ev.object):
+            if not ep:
+                continue
+            nm = normalize_name(ep)
+            if nm and nm not in known:
+                graph.entities.append(Entity(name=ep, type="Entity", sources=list(ev.sources)))
+                known.add(nm)
 
 
 class BuildCancelled(Exception):
@@ -109,11 +129,16 @@ class Supervisor:
             raise BuildCancelled(f"构建已取消：{source}")
 
         if merged:
-            # 合并模式：一次 LLM 调用同时抽取 实体 / 关系 / 事件
+            # 合并模式：每个 chunk 通过 run_merged 一次性（实体 → 关系+事件）抽取
+            # 实体、关系与事件。部分实体/关系可能没有对应事件（事件稀疏属正常），端点
+            # 已在 run_merged 内对齐到已知实体、缺失则补建，保证事件能挂接进图谱。
             if workers > 1:
                 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+                _lock = threading.Lock()
+                _done = {"n": 0}
                 with ThreadPoolExecutor(max_workers=workers) as ex:
+                    emit(f"② 并发抽取实体/关系/事件（并发度 {workers}，共 {total} 块）...")
                     fut = {
                         ex.submit(timed, "MergedExtraction(实体/关系/事件)",
                                   self.extraction.run_merged, c.text, c.source, c.id): i
@@ -122,8 +147,14 @@ class Supervisor:
                     res = {}
                     for f in as_completed(fut):
                         res[fut[f]] = f.result()
+                        with _lock:
+                            _done["n"] += 1
+                            # 实时上报已完成的 chunk 数，供 UI 显示“进行到第几个 chunk”
+                            emit(f"② 实体/关系/事件抽取进行中 (已完成 {_done['n']}/{total}) ...")
                 if self.extraction.correction:
+                    _done2 = {"n": 0}
                     with ThreadPoolExecutor(max_workers=workers) as ex:
+                        emit(f"⑤ 并发修正（共 {total} 块）...")
                         fut_c = {
                             ex.submit(timed, "ExtractionCorrection(修正)",
                                       self.extraction.correct, res[i], chunks[i].text, [chunks[i].id]): i
@@ -132,16 +163,19 @@ class Supervisor:
                         corr = {}
                         for f in as_completed(fut_c):
                             corr[fut_c[f]] = f.result()
+                            with _lock:
+                                _done2["n"] += 1
+                                emit(f"⑤ 修正进行中 (已完成 {_done2['n']}/{total}) ...")
                     res = corr
                 for i in range(total):
                     gd = res[i]
                     _collect(gd.events, gd)
-                    emit(f"② 语义理解 + ③④ 实体/关系抽取 + ⑤ 修正 ({i + 1}/{total}) ...")
+                emit(f"② 实体/关系/事件抽取 + ⑤ 修正 全部完成 ({total}/{total})")
             else:
                 for i, c in enumerate(chunks):
                     if _cancelled():
                         raise BuildCancelled(f"构建已取消：{source}")
-                    emit(f"② 语义理解 + ③④ 实体/关系抽取 ({i + 1}/{total}) ...")
+                    emit(f"② 正在处理第 {i + 1}/{total} 块：语义理解 + 实体/关系抽取...")
                     gd = timed("MergedExtraction(实体/关系/事件)", self.extraction.run_merged,
                                c.text, source=c.source, chunk_id=c.id)
                     if self.extraction.correction:
@@ -149,28 +183,30 @@ class Supervisor:
                                    gd, c.text, [c.id])
                     _collect(gd.events, gd)
         else:
-            # 原两段式：理解(事件) + 抽取(实体/关系)
+            # 原两段式：先抽 实体/关系，再让 语义理解(事件) 以实体/关系为上下文抽取，
+            # 这样事件端点能尽量复用已知实体名，稳定挂接到图谱。
             if workers > 1:
                 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+                _lock = threading.Lock()
+                _done = {"n": 0}
                 with ThreadPoolExecutor(max_workers=workers) as ex:
-                    fut_und = {
-                        ex.submit(timed, "UnderstandingAgent(语义理解)", self.understanding.run,
-                                  c.text, c.source, c.id): i
-                        for i, c in enumerate(chunks)
-                    }
+                    emit(f"③ 并发抽取实体/关系（并发度 {workers}，共 {total} 块）...")
                     fut_ext = {
                         ex.submit(timed, "ExtractionAgent(实体/关系)", self.extraction.run,
                                   c.text, c.source, c.id): i
                         for i, c in enumerate(chunks)
                     }
-                    und, ext = {}, {}
-                    for f in as_completed(fut_und):
-                        und[fut_und[f]] = f.result()
+                    ext = {}
                     for f in as_completed(fut_ext):
                         ext[fut_ext[f]] = f.result()
+                        with _lock:
+                            _done["n"] += 1
+                            emit(f"③ 实体/关系抽取进行中 (已完成 {_done['n']}/{total}) ...")
                 if self.extraction.correction:
+                    _done2 = {"n": 0}
                     with ThreadPoolExecutor(max_workers=workers) as ex:
+                        emit(f"⑤ 并发修正（共 {total} 块）...")
                         fut_c = {
                             ex.submit(timed, "ExtractionCorrection(修正)",
                                       self.extraction.correct, ext[i], chunks[i].text, [chunks[i].id]): i
@@ -179,28 +215,50 @@ class Supervisor:
                         corr = {}
                         for f in as_completed(fut_c):
                             corr[fut_c[f]] = f.result()
+                            with _lock:
+                                _done2["n"] += 1
+                                emit(f"⑤ 修正进行中 (已完成 {_done2['n']}/{total}) ...")
                     ext = corr
+                _done3 = {"n": 0}
+                with ThreadPoolExecutor(max_workers=workers) as ex:
+                    emit(f"② 并发语义理解/事件抽取（共 {total} 块）...")
+                    fut_und = {
+                        ex.submit(timed, "UnderstandingAgent(语义理解/事件)", self.understanding.run,
+                                  c.text, c.source, c.id, ext[i].entities, ext[i].relations): i
+                        for i, c in enumerate(chunks)
+                    }
+                    und = {}
+                    for f in as_completed(fut_und):
+                        und[fut_und[f]] = f.result()
+                        with _lock:
+                            _done3["n"] += 1
+                            emit(f"② 语义理解/事件抽取进行中 (已完成 {_done3['n']}/{total}) ...")
                 for i in range(total):
                     _collect(und[i], ext[i])
-                    emit(f"② 语义理解 + ③④ 实体/关系抽取 + ⑤ 修正 ({i + 1}/{total}) ...")
+                emit(f"② 语义理解 + ③④ 实体/关系抽取 + ⑤ 修正 全部完成 ({total}/{total})")
             else:
                 for i, c in enumerate(chunks):
                     if _cancelled():
                         raise BuildCancelled(f"构建已取消：{source}")
-                    emit(f"② 语义理解 + ③④ 实体/关系抽取 ({i + 1}/{total}) ...")
-                    events = timed("UnderstandingAgent(语义理解)", self.understanding.run,
-                                   c.text, source=c.source, chunk_id=c.id)
+                    emit(f"② 正在处理第 {i + 1}/{total} 块：语义理解 + 实体/关系抽取...")
                     gd = timed("ExtractionAgent(实体/关系)", self.extraction.run,
                                c.text, source=c.source, chunk_id=c.id)
                     if self.extraction.correction:
                         gd = timed("ExtractionCorrection(修正)", self.extraction.correct,
                                    gd, c.text, [c.id])
+                    events = timed("UnderstandingAgent(语义理解/事件)", self.understanding.run,
+                                   c.text, source=c.source, chunk_id=c.id,
+                                   entities=gd.entities, relations=gd.relations)
                     _collect(events, gd)
 
         # Phase 2 — validation (global merge/dedup, CPU-only) overlaps the
         # independent vector-embedding step (network-bound) so both finish sooner.
         # Validation must stay a single global pass: de-duplication needs the whole
         # entity set, so it cannot be split per-chunk without losing merge semantics.
+        # 事件端点若引用了已知实体之外的"其他重要事件"主体/客体，补建为实体节点，
+        # 否则这些事件会在 Validator 阶段因端点无对应实体而被当作孤立事件丢弃。
+        _ensure_event_entities(graph)
+
         emit("⑦ 图谱验证 + 向量索引（并行）...")
         chunk_texts = [c.text for c in chunks]
         metas = [{"source": c.source, "id": c.id} for c in chunks]

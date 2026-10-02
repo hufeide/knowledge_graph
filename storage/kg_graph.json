@@ -205,25 +205,7 @@
           "Forgiveness",
           "Permit"
         ],
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1",
-          "揭秘与人相处的24条黄金法则.txt-2"
-        ]
-      }
-    },
-    {
-      "id": "微笑",
-      "props": {
-        "name": "微笑",
-        "type": "Concept",
-        "description": "保持友好微笑",
-        "aliases": [
-          "Gentleness",
-          "Smile"
-        ],
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
+        "sources": []
       }
     },
     {
@@ -231,102 +213,94 @@
       "props": {
         "name": "24条黄金法则",
         "type": "Concept",
-        "description": "人际关系处理的核心准则",
-        "aliases": [
-          "24 Rules",
-          "Golden Rules"
-        ],
+        "description": "人际关系准则",
+        "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "id": "鼓励",
+      "id": "印第安人",
       "props": {
-        "name": "鼓励",
+        "name": "印第安人",
         "type": "Concept",
-        "description": "积极赞美他人",
-        "aliases": [
-          "Encourage"
-        ],
+        "description": "引用来源",
+        "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "id": "批评",
+      "id": "海洋",
       "props": {
-        "name": "批评",
+        "name": "海洋",
         "type": "Concept",
-        "description": "指出他人缺点",
-        "aliases": [
-          "Critic",
-          "Criticism"
-        ],
+        "description": "比喻性概念",
+        "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "id": "倾听",
+      "id": "溪流",
       "props": {
-        "name": "倾听",
+        "name": "溪流",
         "type": "Concept",
-        "description": "听取他人意见",
-        "aliases": [
-          "Audience",
-          "Listen"
-        ],
+        "description": "比喻性概念",
+        "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "id": "道歉",
+      "id": "2008-10-04",
       "props": {
-        "name": "道歉",
-        "type": "Concept",
-        "description": "承认错误并承担责任",
-        "aliases": [
-          "Apology",
-          "Sincere Apology"
-        ],
+        "name": "2008-10-04",
+        "type": "Date",
+        "description": "更新时间",
+        "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "id": "谦虚",
+      "id": "礼物",
       "props": {
-        "name": "谦虚",
-        "type": "Concept",
-        "description": "保持谦逊态度",
-        "aliases": [
-          "Gentleness",
-          "Humility"
-        ],
+        "name": "礼物",
+        "type": "Product",
+        "description": "在礼物上花费的精力表明了你在他身上花费的心思",
+        "aliases": [],
         "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
+          "揭秘与人相处的24条黄金法则.txt-2"
         ]
       }
     },
     {
-      "id": "真诚",
+      "id": "矛盾",
       "props": {
-        "name": "真诚",
+        "name": "矛盾",
         "type": "Concept",
-        "description": "对他人保持真实兴趣",
-        "aliases": [
-          "Sincerity",
-          "True Interest"
-        ],
+        "description": "发生矛盾的时候，你要保持镇静",
+        "aliases": [],
         "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "全名",
+      "props": {
+        "name": "全名",
+        "type": "Concept",
+        "description": "要始终称呼对方的全名",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
         ]
       }
     },
@@ -335,22 +309,7 @@
       "props": {
         "name": "宽恕",
         "type": "Concept",
-        "description": "原谅他人",
-        "aliases": [
-          "Forgive",
-          "Forgiveness"
-        ],
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "id": "寻找让别人快乐的途径",
-      "props": {
-        "name": "寻找让别人快乐的途径",
-        "type": "Concept",
-        "description": "核心法则/原则",
+        "description": "要尽快宽恕别人，不要记仇",
         "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
@@ -358,10 +317,58 @@
       }
     },
     {
-      "id": "保持微笑",
+      "id": "祝愿",
       "props": {
-        "name": "保持微笑",
+        "name": "祝愿",
         "type": "Concept",
+        "description": "当你想到对方时，要给予他你最好的祝愿",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "称呼对方",
+      "props": {
+        "name": "称呼对方",
+        "type": "Concept",
+        "description": "始终称呼对方的全名",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "你",
+      "props": {
+        "name": "你",
+        "type": "Concept",
+        "description": "指代人",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "别人",
+      "props": {
+        "name": "别人",
+        "type": "Concept",
+        "description": "指代对方",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "心思",
+      "props": {
+        "name": "心思",
+        "type": "Entity",
         "description": "",
         "aliases": [],
         "sources": [
@@ -370,11 +377,11 @@
       }
     },
     {
-      "id": "24条法则",
+      "id": "保持镇静",
       "props": {
-        "name": "24条法则",
-        "type": "Concept",
-        "description": "文中统领性核心概念",
+        "name": "保持镇静",
+        "type": "Entity",
+        "description": "",
         "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
@@ -382,11 +389,11 @@
       }
     },
     {
-      "id": "植物枯萎",
+      "id": "尊重",
       "props": {
-        "name": "植物枯萎",
-        "type": "Concept",
-        "description": "比喻语境中的类比",
+        "name": "尊重",
+        "type": "Entity",
+        "description": "",
         "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
@@ -394,11 +401,11 @@
       }
     },
     {
-      "id": "给植物浇水",
+      "id": "记仇",
       "props": {
-        "name": "给植物浇水",
-        "type": "Concept",
-        "description": "比喻语境中的类比",
+        "name": "记仇",
+        "type": "Entity",
+        "description": "",
         "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
@@ -406,17 +413,29 @@
       }
     },
     {
-      "id": "event::d8e3891cea72",
+      "id": "事物",
+      "props": {
+        "name": "事物",
+        "type": "Entity",
+        "description": "",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::ea4177d0eb4e",
       "props": {
         "kind": "event",
-        "name": "文本提出寻找让别人快乐的途径",
+        "name": "在发生矛盾的时候，你要保持镇静",
         "type": "Event",
-        "event_type": "事件类型",
-        "subject": "寻找让别人快乐的途径",
-        "object": "寻找让别人快乐的途径",
-        "time": "文本中未明确提及",
-        "summary": "文本提出寻找让别人快乐的途径",
-        "description": "文本提出寻找让别人快乐的途径",
+        "event_type": "保持镇静",
+        "subject": "矛盾",
+        "object": "你",
+        "time": "发生矛盾的时候",
+        "summary": "在发生矛盾的时候，你要保持镇静",
+        "description": "在发生矛盾的时候，你要保持镇静",
         "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
@@ -424,17 +443,89 @@
       }
     },
     {
-      "id": "event::4e2397714e60",
+      "id": "event::4e5e21659483",
+      "props": {
+        "kind": "event",
+        "name": "你要对别人表示真正感兴趣",
+        "type": "Event",
+        "event_type": "对别人感兴趣",
+        "subject": "你",
+        "object": "别人",
+        "time": "作为自己的口号",
+        "summary": "你要对别人表示真正感兴趣",
+        "description": "你要对别人表示真正感兴趣",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::eee29d9ed8c5",
       "props": {
         "kind": "event",
         "name": "保持微笑",
         "type": "Event",
-        "event_type": "事件类型",
-        "subject": "保持微笑",
-        "object": "保持微笑",
-        "time": "文本中未明确提及",
+        "event_type": "保持微笑",
+        "subject": "你",
+        "object": "别人",
+        "time": "没有比那些从不对人微笑的人更需要微笑的了",
         "summary": "保持微笑",
         "description": "保持微笑",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::80eacfba16ea",
+      "props": {
+        "kind": "event",
+        "name": "要始终称呼对方的全名",
+        "type": "Event",
+        "event_type": "称呼对方全名",
+        "subject": "你",
+        "object": "称呼对方",
+        "time": "始终",
+        "summary": "要始终称呼对方的全名",
+        "description": "要始终称呼对方的全名",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::61249095685f",
+      "props": {
+        "kind": "event",
+        "name": "你要学会从对方的角度来看待事物",
+        "type": "Event",
+        "event_type": "从对方角度看待",
+        "subject": "你",
+        "object": "事物",
+        "time": "问自己：真正需要的是什么？",
+        "summary": "你要学会从对方的角度来看待事物",
+        "description": "你要学会从对方的角度来看待事物",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::fc6a0f90cd99",
+      "props": {
+        "kind": "event",
+        "name": "要尽快宽恕别人，不要记仇",
+        "type": "Event",
+        "event_type": "宽恕别人",
+        "subject": "你",
+        "object": "别人",
+        "time": "要尽快",
+        "summary": "要尽快宽恕别人，不要记仇",
+        "description": "要尽快宽恕别人，不要记仇",
         "aliases": [],
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
@@ -634,128 +725,38 @@
       }
     },
     {
-      "source": "24条黄金法则",
-      "target": "鼓励",
+      "source": "印第安人",
+      "target": "24条黄金法则",
       "props": {
-        "type": "USES",
+        "type": "MENTIONS",
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "source": "24条黄金法则",
-      "target": "谦虚",
+      "source": "海洋",
+      "target": "溪流",
       "props": {
-        "type": "USES",
+        "type": "RELATED_TO",
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "source": "24条黄金法则",
-      "target": "倾听",
+      "source": "2008-10-04",
+      "target": "24条黄金法则",
       "props": {
-        "type": "USES",
+        "type": "WORKS_FOR",
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-1"
         ]
       }
     },
     {
-      "source": "24条黄金法则",
-      "target": "宽容",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "source": "24条黄金法则",
-      "target": "真诚",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "source": "24条黄金法则",
-      "target": "微笑",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "source": "24条黄金法则",
-      "target": "宽恕",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "source": "24条黄金法则",
-      "target": "批评",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "source": "24条黄金法则",
-      "target": "道歉",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-1"
-        ]
-      }
-    },
-    {
-      "source": "寻找让别人快乐的途径",
-      "target": "保持微笑",
-      "props": {
-        "type": "USES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-2"
-        ]
-      }
-    },
-    {
-      "source": "寻找让别人快乐的途径",
-      "target": "宽容",
-      "props": {
-        "type": "COMPARES",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-2"
-        ]
-      }
-    },
-    {
-      "source": "寻找让别人快乐的途径",
-      "target": "24条法则",
-      "props": {
-        "type": "RELATES_TO",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-2"
-        ]
-      }
-    },
-    {
-      "source": "寻找让别人快乐的途径",
-      "target": "24条法则",
+      "source": "礼物",
+      "target": "心思",
       "props": {
         "type": "RELATED_TO",
         "sources": [
@@ -764,8 +765,38 @@
       }
     },
     {
-      "source": "寻找让别人快乐的途径",
-      "target": "植物枯萎",
+      "source": "矛盾",
+      "target": "保持镇静",
+      "props": {
+        "type": "RELATED_TO",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "矛盾",
+      "target": "event::ea4177d0eb4e",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "全名",
+      "target": "尊重",
+      "props": {
+        "type": "RELATED_TO",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "宽恕",
+      "target": "记仇",
       "props": {
         "type": "CAUSES",
         "sources": [
@@ -774,28 +805,18 @@
       }
     },
     {
-      "source": "寻找让别人快乐的途径",
-      "target": "给植物浇水",
+      "source": "祝愿",
+      "target": "称呼对方",
       "props": {
-        "type": "USES",
+        "type": "RELATED_TO",
         "sources": [
           "揭秘与人相处的24条黄金法则.txt-2"
         ]
       }
     },
     {
-      "source": "寻找让别人快乐的途径",
-      "target": "event::d8e3891cea72",
-      "props": {
-        "type": "EVENT_SUBJECT",
-        "sources": [
-          "揭秘与人相处的24条黄金法则.txt-2"
-        ]
-      }
-    },
-    {
-      "source": "保持微笑",
-      "target": "event::4e2397714e60",
+      "source": "你",
+      "target": "event::4e5e21659483",
       "props": {
         "type": "EVENT_SUBJECT",
         "sources": [
@@ -804,8 +825,48 @@
       }
     },
     {
-      "source": "event::d8e3891cea72",
-      "target": "寻找让别人快乐的途径",
+      "source": "你",
+      "target": "event::eee29d9ed8c5",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "你",
+      "target": "event::80eacfba16ea",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "你",
+      "target": "event::61249095685f",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "你",
+      "target": "event::fc6a0f90cd99",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::ea4177d0eb4e",
+      "target": "你",
       "props": {
         "type": "EVENT_OBJECT",
         "sources": [
@@ -814,8 +875,48 @@
       }
     },
     {
-      "source": "event::4e2397714e60",
-      "target": "保持微笑",
+      "source": "event::4e5e21659483",
+      "target": "别人",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::eee29d9ed8c5",
+      "target": "别人",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::80eacfba16ea",
+      "target": "称呼对方",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::61249095685f",
+      "target": "事物",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::fc6a0f90cd99",
+      "target": "别人",
       "props": {
         "type": "EVENT_OBJECT",
         "sources": [

@@ -32,13 +32,19 @@
     .querybar input { flex:1; background:#0b0f14; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px; }
     #answer { position:absolute; right:16px; bottom:80px; width:420px; max-height:50%; overflow:auto; background:var(--panel);
               border:1px solid var(--border); border-radius:10px; padding:12px; display:none; font-size:13px; box-shadow:0 8px 24px rgba(0,0,0,.4); }
-    #answer h4 { margin:0 0 6px; font-size:13px; color:var(--accent); }
+    #answer h4 { margin:0 0 6px; font-size:13px; color:var(--accent); padding-right:22px; }
+    #answer .answer-close { position:absolute; top:6px; right:6px; background:transparent; border:none;
+              color:var(--muted); font-size:18px; line-height:1; padding:2px 8px; cursor:pointer; }
+    #answer .answer-close:hover { color:var(--text); }
     #answer .ctx { color:var(--muted); font-size:11px; margin-top:8px; border-top:1px solid var(--border); padding-top:6px; }
     .hint { font-size:11px; color:var(--muted); }
     #queueList { display:flex; flex-direction:column; gap:6px; }
     .qitem { background:#0b0f14; border:1px solid var(--border); border-radius:8px; padding:8px; font-size:12px; }
     .qitem .qname { color:var(--text); word-break:break-all; }
+    .qitem .qstatus { color:var(--accent); margin-top:3px; font-weight:600; }
     .qitem .qmeta { color:var(--muted); margin-top:3px; }
+    .qitem.done .qstatus { color:#3fb950; }
+    .qitem.error .qstatus { color:#ff7b72; }
     .qitem .bar { height:4px; border-radius:2px; background:#21262d; margin-top:6px; overflow:hidden; }
     .qitem .bar > i { display:block; height:100%; background:var(--accent); width:0; transition:width .2s; }
     .qitem.done .qmeta { color:#3fb950; }
@@ -107,7 +113,10 @@
     </div>
     <div class="content">
       <div id="graph"></div>
-      <div id="answer"></div>
+      <div id="answer">
+        <button class="answer-close" id="answerClose" title="关闭">×</button>
+        <div id="answerBody"></div>
+      </div>
       <div class="querybar">
         <input id="queryInput" placeholder="向知识图谱提问，例如：NVIDIA 生产了哪些产品？" />
         <button id="queryBtn">问答</button>
@@ -242,11 +251,22 @@
       const items = allItems();
       if (!items.length) { $('queueList').innerHTML = '<div class="hint">暂无任务。</div>'; return; }
       $('queueList').innerHTML = items.map(it => {
-        const pct = it.total ? Math.round((it.cur || 0) / it.total * 100) : (it.status === '完成' ? 100 : 0);
-        let meta = it.status === '构建中'
-          ? `处理中 — ${escapeHtml(it.message || '')}`
-          : (it.result ? `完成：${it.result.chunks} 块，节点 ${it.result.stats.node_count}，边 ${it.result.stats.edge_count}`
-                       : (it.error ? `失败：${escapeHtml(it.error)}` : (it.message || it.status)));
+        const total = it.total || 0;
+        const cur = it.cur || 0;
+        const pct = total ? Math.round(cur / total * 100) : (it.status === '完成' ? 100 : 0);
+        let statusLine, meta = '';
+        if (it.status === '构建中') {
+          const chunkTxt = total ? `进行到第 ${cur} / ${total} 块` : '处理中';
+          statusLine = `构建中 · ${chunkTxt}（${pct}%）`;
+          meta = escapeHtml(it.message || '');
+        } else if (it.result) {
+          statusLine = `完成：第 ${it.result.chunks} 块，节点 ${it.result.stats.node_count}，边 ${it.result.stats.edge_count}`;
+          meta = escapeHtml(it.message || '');
+        } else if (it.error) {
+          statusLine = `失败：${escapeHtml(it.error)}`;
+        } else {
+          statusLine = escapeHtml(it.message || it.status);
+        }
         const cls = it.status === '完成' ? 'done' : it.status === '失败' ? 'error' : it.status === '构建中' ? 'running' : '';
         const delTag = it.deleted ? '<span class="tag-del">已删除数据</span>' : '';
         let delBtn = '';
@@ -258,7 +278,8 @@
         }
         return `<div class="qitem ${cls}">
                   <div class="qname">${escapeHtml(it.filename || '')}${delTag}</div>
-                  <div class="qmeta">${meta}</div>
+                  <div class="qstatus">${statusLine}</div>
+                  ${meta ? `<div class="qmeta">${meta}</div>` : ''}
                   <div class="bar"><i style="width:${pct}%"></i></div>
                   <div class="qactions">${delBtn}</div>
                 </div>`;
@@ -415,8 +436,9 @@
       if (!q) return;
       $('queryBtn').disabled = true;
       const ans = $('answer');
+      const body = $('answerBody');
       ans.style.display = 'block';
-      ans.innerHTML = '<h4>问答结果</h4><div class="ctx">思考中...</div>';
+      body.innerHTML = '<h4>问答结果</h4><div class="ctx">思考中...</div>';
       try {
         const res = await fetch('/api/query', { method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ question: q }) });
@@ -424,7 +446,7 @@
         try { r = await res.json(); } catch (_) { r = {}; }
         if (!res.ok) {
           const msg = r.detail || r.error || ('HTTP ' + res.status);
-          ans.innerHTML = `<h4>问答结果</h4><div class="ctx" style="color:#ff7b72">${escapeHtml(msg)}</div>`;
+          body.innerHTML = `<h4>问答结果</h4><div class="ctx" style="color:#ff7b72">${escapeHtml(msg)}</div>`;
           return;
         }
         let html = `<h4>问答结果</h4>${escapeHtml(r.answer || '（无结果）')}`;
@@ -440,11 +462,14 @@
         if (r.error) {
           html += `<div class="ctx" style="color:#ff7b72">提示：${escapeHtml(r.error)}</div>`;
         }
-        ans.innerHTML = html;
+        body.innerHTML = html;
       } catch (e) {
-        ans.innerHTML = `<h4>问答结果</h4><div class="ctx" style="color:#ff7b72">请求失败：${escapeHtml(String(e))}</div>`;
+        body.innerHTML = `<h4>问答结果</h4><div class="ctx" style="color:#ff7b72">请求失败：${escapeHtml(String(e))}</div>`;
       } finally { $('queryBtn').disabled = false; }
     };
+
+    // 关闭问答结果面板（下次提问会重新弹出）
+    $('answerClose').onclick = () => { $('answer').style.display = 'none'; };
 
     function setBusy(b) { $('buildBtn').disabled = b; $('uploadBtn').disabled = b; }
     function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }

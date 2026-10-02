@@ -200,3 +200,29 @@
   schema: {"node_types": ["Concept"], "relation_types": ["CAUSES", "COMPARES", "RELATED_TO", "RELATES_TO", "USES"], "event_types": ["事件类型"], "entity_count": 15, "relation_count": 15, "event_count": 131, "type_aliases": {"24条黄金法则": ["24 Rules", "Golden Rules"], "鼓励": ["Encourage"], "批评": ["Critic", "Criticism"], "倾听": ["Audience", "Listen"], "道歉": ["Apology", "Sincere Apology"], "宽容": ["Forgiveness", "Permit
   stats : {"backend": "NetworkXStore", "node_count": 33, "edge_count": 38, "node_types": ["Company", "Concept", "Entity", "Event", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "COMPARES", "EVENT_OBJECT", "EVENT_SUBJECT", "LEADS", "PART_OF", "RELATED_TO", "RELATES_TO", "USES"]}
 
+================================================================
+[2026-10-02T13:14:09.495405] build timing | source=揭秘与人相处的24条黄金法则.txt | chunks=2
+  MergedExtraction(实体/关系/事件)   286.06s   96.2%
+  EmbeddingClient(向量)           11.31s    3.8%
+  SchemaAgent(Schema)            0.00s    0.0%
+  DataAgent(分块)                  0.00s    0.0%
+  ValidatorAgent(校验)             0.00s    0.0%
+  GraphWriterAgent(写入)           0.00s    0.0%
+  AGENT_WORK_TOTAL             297.38s
+  WALL_TOTAL                   154.41s
+  schema: {"node_types": ["Concept", "Entity"], "relation_types": ["CAUSES", "MENTIONS", "USES"], "event_types": [], "entity_count": 9, "relation_count": 19, "event_count": 0, "type_aliases": {}}
+  stats : {"backend": "NetworkXStore", "node_count": 26, "edge_count": 38, "node_types": ["Company", "Concept", "Entity", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "LEADS", "MENTIONS", "PART_OF", "USES"]}
+
+================================================================
+[2026-10-02T13:31:31.947244] build timing | source=揭秘与人相处的24条黄金法则.txt | chunks=2
+  MergedExtraction(实体/关系/事件)   108.19s   99.2%
+  EmbeddingClient(向量)            0.87s    0.8%
+  GraphWriterAgent(写入)           0.00s    0.0%
+  DataAgent(分块)                  0.00s    0.0%
+  ValidatorAgent(校验)             0.00s    0.0%
+  SchemaAgent(Schema)            0.00s    0.0%
+  AGENT_WORK_TOTAL             109.06s
+  WALL_TOTAL                    71.85s
+  schema: {"node_types": ["Concept", "Date", "Entity", "Product"], "relation_types": ["CAUSES", "MENTIONS", "RELATED_TO", "WORKS_FOR"], "event_types": ["从对方角度看待", "保持微笑", "保持镇静", "宽恕别人", "对别人感兴趣", "称呼对方全名"], "entity_count": 18, "relation_count": 8, "event_count": 6, "type_aliases": {}}
+  stats : {"backend": "NetworkXStore", "node_count": 41, "edge_count": 39, "node_types": ["Company", "Concept", "Date", "Entity", "Event", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "EVENT_OBJECT", "EVENT_SUBJECT", "LEADS", "MENTIONS", "PART_OF", "RELATED_TO", "USES", "WORKS_FOR"]}
+
