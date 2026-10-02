@@ -58,14 +58,21 @@ class QAAgent(Agent):
     def answer(self, question: str, top_k: int | None = None) -> dict:
         top_k = top_k or self.cfg.qa_top_k
 
-        # 1. Query understanding: entity linking + intent (the "reasoning layer")
-        linking = self._link_entities(question)
+        # 1. Vector retrieval FIRST — also feeds the entity linker so it can ground
+        #    entity identification in what is *actually* in the knowledge base
+        #    (otherwise a vague/garbled question makes the linker hallucinate an
+        #    irrelevant entity, e.g. NVIDIA for a question about interpersonal tips).
+        hits = self.vector_store.search(self.emb.embed_query(question), top_k=top_k) if self.vector_store else []
+        retrieval_text = "\n---\n".join(t for t, _m, _s in hits)[:4000]
 
-        # 2. Graph retrieval: expand linked entities into a multi-hop subgraph
+        # 2. Query understanding: entity linking + intent, grounded in retrieved text
+        linking = self._link_entities(question, context=retrieval_text)
+
+        # 3. Graph retrieval: expand linked entities into a multi-hop subgraph
         subgraph = None
         graph_context = ""
         entity_names: list[str] = []
-        if self.graph_store:
+        if self.graph_store and linking["entities"]:
             seed_names = [e["name"] for e in linking["entities"]]
             subgraph = self.graph_store.retrieve_subgraph(
                 seed_names,
@@ -77,9 +84,6 @@ class QAAgent(Agent):
         if not entity_names and linking["entities"]:
             entity_names = [e["name"] for e in linking["entities"]]
 
-        # 3. Vector retrieval: semantic passage recall
-        hits = self.vector_store.search(self.emb.embed_query(question), top_k=top_k) if self.vector_store else []
-
         # 4. Evidence fusion: rerank chunks by vector + graph + provenance
         if self.graph_store and entity_names:
             hits = self._rerank(hits, entity_names)
@@ -90,10 +94,10 @@ class QAAgent(Agent):
         prompt = (
             QA_PROMPT.replace("{question}", question)
             .replace("{intent}", linking.get("intent") or "（未识别）")
-            .replace("{graph_context}", graph_context or "（知识图谱中暂无相关实体）")
+            .replace("{graph_context}", graph_context or "（知识图谱中未检索到与问题相关的实体/关系，请勿假设存在图谱数据，仅依据下方【检索片段】作答）")
             .replace("{context}", context or "（无检索片段）")
         )
-        answer = self.llm.complete(prompt, system=QA_SYSTEM, temperature=0.3, max_tokens=1024)
+        answer = self.llm.complete(prompt, system=QA_SYSTEM, temperature=0.1, max_tokens=1024)
 
         return {
             "answer": answer,
@@ -107,13 +111,19 @@ class QAAgent(Agent):
         }
 
     # ---- query understanding ------------------------------------------
-    def _link_entities(self, question: str) -> dict:
-        """LLM-based entity linking + intent; falls back to keyword match."""
+    def _link_entities(self, question: str, context: str = "") -> dict:
+        """LLM-based entity linking + intent; falls back to keyword match.
+
+        ``context`` is the text retrieved from the vector store for this question.
+        Feeding it to the linker grounds entity identification in what is actually
+        present in the knowledge base, so a vague/garbled question no longer
+        resolves to a hallucinated, irrelevant entity (e.g. NVIDIA).
+        """
         try:
-            data = self.llm.complete_json(
-                QA_ENTITY_LINKING_PROMPT.replace("{question}", question),
-                system=QA_ENTITY_LINKING_SYSTEM,
+            prompt = QA_ENTITY_LINKING_PROMPT.replace("{question}", question).replace(
+                "{context}", context or "（无参考文本）"
             )
+            data = self.llm.complete_json(prompt, system=QA_ENTITY_LINKING_SYSTEM)
             if isinstance(data, dict):
                 ents = [
                     {"name": e["name"], "type": e.get("type", "")}
