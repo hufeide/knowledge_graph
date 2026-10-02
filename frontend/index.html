@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>多 Agent 知识图谱构建</title>
+  <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+  <style>
+    :root { --bg:#0f1419; --panel:#161b22; --border:#2a3038; --accent:#4f8cff; --text:#e6edf3; --muted:#8b949e; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+           background:var(--bg); color:var(--text); height:100vh; display:flex; flex-direction:column; }
+    header { padding:12px 20px; background:var(--panel); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:14px; }
+    header h1 { font-size:18px; margin:0; }
+    header .badge { font-size:12px; color:var(--muted); border:1px solid var(--border); padding:2px 8px; border-radius:10px; }
+    .main { flex:1; display:flex; min-height:0; }
+    .sidebar { width:360px; min-width:300px; background:var(--panel); border-right:1px solid var(--border);
+               padding:16px; display:flex; flex-direction:column; gap:12px; overflow:auto; }
+    .content { flex:1; display:flex; flex-direction:column; min-width:0; }
+    #graph { flex:1; min-height:0; background:#0b0f14; }
+    textarea { width:100%; min-height:160px; background:#0b0f14; color:var(--text); border:1px solid var(--border);
+               border-radius:8px; padding:10px; font-size:13px; resize:vertical; }
+    button { background:var(--accent); color:#fff; border:none; padding:9px 14px; border-radius:8px; cursor:pointer; font-size:13px; }
+    button.secondary { background:#21262d; border:1px solid var(--border); color:var(--text); }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    label { font-size:12px; color:var(--muted); display:block; margin-bottom:4px; }
+    .row { display:flex; gap:8px; }
+    .row > * { flex:1; }
+    #status { font-size:12px; color:var(--muted); min-height:16px; }
+    #stats { font-size:12px; color:var(--muted); background:#0b0f14; border:1px solid var(--border); border-radius:8px; padding:8px; }
+    .querybar { border-top:1px solid var(--border); padding:12px 16px; display:flex; gap:8px; background:var(--panel); }
+    .querybar input { flex:1; background:#0b0f14; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px; }
+    #answer { position:absolute; right:16px; bottom:80px; width:420px; max-height:50%; overflow:auto; background:var(--panel);
+              border:1px solid var(--border); border-radius:10px; padding:12px; display:none; font-size:13px; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+    #answer h4 { margin:0 0 6px; font-size:13px; color:var(--accent); }
+    #answer .ctx { color:var(--muted); font-size:11px; margin-top:8px; border-top:1px solid var(--border); padding-top:6px; }
+    .hint { font-size:11px; color:var(--muted); }
+    #queueList { display:flex; flex-direction:column; gap:6px; }
+    .qitem { background:#0b0f14; border:1px solid var(--border); border-radius:8px; padding:8px; font-size:12px; }
+    .qitem .qname { color:var(--text); word-break:break-all; }
+    .qitem .qmeta { color:var(--muted); margin-top:3px; }
+    .qitem .bar { height:4px; border-radius:2px; background:#21262d; margin-top:6px; overflow:hidden; }
+    .qitem .bar > i { display:block; height:100%; background:var(--accent); width:0; transition:width .2s; }
+    .qitem.done .qmeta { color:#3fb950; }
+    .qitem.error .qmeta { color:#ff7b72; }
+    .qitem.running .qname { color:var(--accent); }
+    .qitem { position:relative; }
+    .qactions { margin-top:6px; display:flex; gap:6px; }
+    .qactions button.delBtn { background:#3a2230; border:1px solid #5a2a3a; color:#ff7b72; padding:4px 10px; font-size:11px; }
+    .qactions button.delBtn:hover { background:#5a2a3a; }
+    .qactions button.delBtn:disabled { opacity:.5; cursor:not-allowed; }
+    .tag-del { display:inline-block; font-size:10px; color:#8b949e; border:1px solid var(--border); border-radius:8px; padding:0 6px; margin-left:6px; }
+    .tfilter { font-size:12px; color:var(--text); display:flex; align-items:center; gap:6px; padding:3px 6px;
+               background:#0b0f14; border:1px solid var(--border); border-radius:6px; cursor:pointer; word-break:break-all; }
+    .tfilter:hover { border-color:var(--accent); }
+    .tfilter input { flex:0 0 auto; accent-color:var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🕸️ 多 Agent 知识图谱构建</h1>
+    <span class="badge" id="backend">backend</span>
+    <span class="badge" id="counts">0 nodes / 0 edges</span>
+  </header>
+  <div class="main">
+    <div class="sidebar">
+      <div>
+        <label>输入文本 / 文档</label>
+        <textarea id="input" placeholder="在此粘贴一段文本（如公司、产品、技术介绍），点击「构建知识图谱」..."></textarea>
+      </div>
+      <div class="row">
+        <button id="buildBtn">构建知识图谱</button>
+        <button id="resetBtn" class="secondary">清空</button>
+      </div>
+      <div>
+        <label>上传文件批量构建（.txt / .md / .pdf，可多选排队）</label>
+        <input type="file" id="fileInput" accept=".txt,.md,.pdf" multiple />
+        <div class="row" style="margin-top:6px;">
+          <button id="uploadBtn" class="secondary">加入队列并构建</button>
+        </div>
+        <div id="queueList" style="margin-top:8px;"></div>
+      </div>
+      <div>
+        <label>按已完成任务查看图谱（可单选 / 多选）</label>
+        <div id="taskFilter" style="display:flex; flex-direction:column; gap:4px; max-height:170px; overflow:auto; margin-top:4px;"></div>
+        <div class="row" style="margin-top:6px;">
+          <button id="clearFilterBtn" class="secondary" style="font-size:11px; padding:5px 8px;">清除筛选（看全部）</button>
+        </div>
+      </div>
+      <div>
+        <label>按节点类型查看图谱</label>
+        <div id="typeFilter" style="display:flex; flex-wrap:wrap; gap:4px; max-height:170px; overflow:auto; margin-top:4px;"></div>
+        <div class="row" style="margin-top:6px;">
+          <button id="clearTypeBtn" class="secondary" style="font-size:11px; padding:5px 8px;">显示全部类型</button>
+        </div>
+      </div>
+      <div id="status">就绪。</div>
+      <div id="stats">统计信息：暂无数据。</div>
+      <div class="hint">流程：数据采集 → 语义理解 → 实体/关系抽取 → Schema 设计 → 验证去重 → 写入图谱 → 向量索引（RAG）。</div>
+    </div>
+    <div class="content">
+      <div id="graph"></div>
+      <div id="answer"></div>
+      <div class="querybar">
+        <input id="queryInput" placeholder="向知识图谱提问，例如：NVIDIA 生产了哪些产品？" />
+        <button id="queryBtn">问答</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let network = null;
+
+    async function refreshGraph() {
+      const res = await fetch('/api/graph');
+      allGraph = await res.json();
+      renderTypeFilter();
+      drawFiltered();
+    }
+
+    // 节点/边的 sources 存的是分块 id（形如 "report.pdf-3"），需按文件名或其前缀匹配。
+    function srcMatches(source, srcs) {
+      return (srcs || []).some(s => s === source || s.startsWith(source + "-"));
+    }
+
+    // 按选中的已完成任务（来源）+ 节点类型筛选图谱：
+    // 只显示命中来源、且两端都在集合内、且节点类型被勾选的节点/边。
+    function drawFiltered() {
+      if (!allGraph) return;
+      const srcSel = [...selectedSources];
+      const typeSel = [...selectedTypes];
+      let nodes, edges;
+      if (srcSel.length === 0) {
+        nodes = allGraph.nodes;
+        edges = allGraph.edges;
+      } else {
+        const ns = allGraph.nodes.filter(n => srcSel.some(src => srcMatches(src, n.sources)));
+        const ids = new Set(ns.map(n => n.id));
+        nodes = ns;
+        edges = allGraph.edges.filter(e =>
+          ids.has(e.from) && ids.has(e.to) && srcSel.some(src => srcMatches(src, e.sources)));
+      }
+      // 节点类型筛选（空集合 = 全部类型）
+      if (typeSel.length) {
+        nodes = nodes.filter(n => typeSel.includes(n.type || n.group || 'Entity'));
+        const ids = new Set(nodes.map(n => n.id));
+        edges = edges.filter(e => ids.has(e.from) && ids.has(e.to));
+      }
+      drawGraph({ nodes, edges });
+      const tag = (srcSel.length ? `（来源 ${srcSel.length}）` : '') + (typeSel.length ? `（类型 ${typeSel.length}）` : '');
+      $('counts').textContent = `${nodes.length} nodes / ${edges.length} edges${tag}`;
+    }
+    async function refreshStats() {
+      try {
+        const res = await fetch('/api/stats');
+        const s = await res.json();
+        $('backend').textContent = s.backend;
+        $('stats').innerHTML = `统计信息：<br>后端: ${s.backend}<br>节点: ${s.node_count} ｜ 边: ${s.edge_count}<br>`
+          + `节点类型: ${(s.node_types||[]).join(', ') || '-'}<br>关系类型: ${(s.relation_types||[]).join(', ') || '-'}`;
+      } catch (e) {}
+    }
+
+    function drawGraph(data) {
+      const nodes = new vis.DataSet(data.nodes.map(n => {
+        let title = (n.type || '');
+        if (n.time) title += ' @ ' + n.time;
+        if (n.description) title += '\\n' + n.description;
+        if (n.sources && n.sources.length) title += '\\n来源: ' + n.sources.join(', ');
+        return { id: n.id, label: n.label, group: n.group || n.type || 'Entity', title };
+      }));
+      const edges = new vis.DataSet(data.edges.map(e => ({
+        id: e.id, from: e.from, to: e.to, label: e.label, arrows: 'to', font: { size: 10, color: '#8b949e' }
+      })));
+      const palette = ['#4f8cff','#ff7b72','#3fb950','#d2a8ff','#f0883e','#56d4dd','#e3b341','#ff9bce'];
+      const groups = {};
+      [...new Set(data.nodes.map(n => n.group || n.type || 'Entity'))].forEach((t, i) => {
+        groups[t] = { color: { background: palette[i % palette.length], border: '#0d1117' } };
+      });
+      const container = $('graph');
+      if (network) { network.destroy(); network = null; }
+      network = new vis.Network(container, { nodes, edges }, {
+        layout: { improvedLayout: true },
+        physics: { stabilization: true, barnesHut: { gravitationalConstant: -8000, springLength: 120 } },
+        nodes: { shape: 'dot', size: 14, font: { color: '#e6edf3', size: 13 }, borderWidth: 2 },
+        edges: { color: { color: '#3a4452', highlight: '#4f8cff' }, smooth: { type: 'cubicBezier' } },
+        groups
+      });
+    }
+
+    $('buildBtn').onclick = async () => {
+      const text = $('input').value.trim();
+      if (!text) { $('status').textContent = '请先输入文本。'; return; }
+      setBusy(true); $('status').textContent = '构建中...（多 Agent 协同）';
+      try {
+        const res = await fetch('/api/build_text_job', { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ text }) });
+        const r = await res.json();
+        // 与文件导入统一：注册为异步任务，由轮询更新进度/完成，并出现在任务筛选中
+        jobs[r.job_id] = { job_id: r.job_id, filename: r.filename, status: '构建中',
+                           message: '已提交，构建中...', cur: 0, total: 0 };
+        renderQueue();
+        $('status').textContent = `已提交文本构建任务「${r.filename}」，可在任务列表中查看进度。`;
+      } catch (e) { $('status').textContent = '构建失败: ' + e; }
+      setBusy(false);
+    };
+
+    // ---- 任务队列（状态以服务端 /api/jobs 为准，刷新可恢复） ----------
+    // 浏览器刷新会清空 JS 内存与 SSE 连接，因此队列不再存本地，而是直接
+    // 轮询服务端 /api/jobs：已提交的任务（构建中/完成/失败）都能被重新拉回。
+    let pending = [];   // 待上传的 {f: File, localId: string}（仅暂存文件，刷新会丢失，属正常）
+    let jobs = {};      // job_id -> {job_id, filename, status, message, cur, total, result, error, deleted}
+    let processing = false;
+    let allGraph = null;                 // 最近一次拉取的全量图谱（筛选在本地进行）
+    let selectedSources = new Set();     // 选中的已完成任务来源（文件名）
+    let selectedTypes = new Set();       // 选中的节点类型（空 = 全部类型）
+
+    function allItems() {
+      // 单一数据源：所有任务（含本地排队中）都以 job 形式存在 jobs 中。
+      // 按文件名折叠：同一文件只显示一条（优先进行中/排队中，其次最新完成），与图谱筛选一致。
+      const byName = {};
+      for (const j of Object.values(jobs)) {
+        const k = j.filename || j.job_id;
+        const cur = byName[k];
+        const live = j.status === '构建中' || j.status === '排队中';
+        const curLive = cur && (cur.status === '构建中' || cur.status === '排队中');
+        if (!cur || live || (curLive ? false : (j.finished_at || 0) >= (cur.finished_at || 0))) {
+          byName[k] = j;
+        }
+      }
+      return Object.values(byName).map(j => Object.assign({}, j));
+    }
+
+    function renderQueue() {
+      const items = allItems();
+      if (!items.length) { $('queueList').innerHTML = '<div class="hint">暂无任务。</div>'; return; }
+      $('queueList').innerHTML = items.map(it => {
+        const pct = it.total ? Math.round((it.cur || 0) / it.total * 100) : (it.status === '完成' ? 100 : 0);
+        let meta = it.status === '构建中'
+          ? `处理中 — ${escapeHtml(it.message || '')}`
+          : (it.result ? `完成：${it.result.chunks} 块，节点 ${it.result.stats.node_count}，边 ${it.result.stats.edge_count}`
+                       : (it.error ? `失败：${escapeHtml(it.error)}` : (it.message || it.status)));
+        const cls = it.status === '完成' ? 'done' : it.status === '失败' ? 'error' : it.status === '构建中' ? 'running' : '';
+        const delTag = it.deleted ? '<span class="tag-del">已删除数据</span>' : '';
+        let delBtn = '';
+        if (!it.deleted) {
+          const src = escapeAttr(it.filename || '');
+          const job = it.job_id || '';
+          const lbl = it.status === '排队中' ? '移除' : '删除入库数据';
+          delBtn = `<button class="delBtn" data-job="${job}" data-source="${src}">${lbl}</button>`;
+        }
+        return `<div class="qitem ${cls}">
+                  <div class="qname">${escapeHtml(it.filename || '')}${delTag}</div>
+                  <div class="qmeta">${meta}</div>
+                  <div class="bar"><i style="width:${pct}%"></i></div>
+                  <div class="qactions">${delBtn}</div>
+                </div>`;
+      }).join('');
+      renderTaskFilter();
+    }
+
+    // ---- 已完成任务的图谱筛选复选框（单选 / 多选） ----
+    function renderTaskFilter() {
+      const done = Object.values(jobs).filter(j => j.status === '完成' && !j.deleted);
+      const bySource = {};
+      for (const j of done) bySource[j.filename] = true;   // 同名文件去重
+      const sources = Object.keys(bySource).sort();
+      if (!sources.length) {
+        $('taskFilter').innerHTML = '<div class="hint">暂无已完成任务，构建成功后可在此按文件筛选查看图谱。</div>';
+        return;
+      }
+      $('taskFilter').innerHTML = sources.map(s =>
+        `<label class="tfilter"><input type="checkbox" data-source="${escapeAttr(s)}" ${selectedSources.has(s) ? 'checked' : ''}/> ${escapeHtml(s)}</label>`
+      ).join('');
+    }
+
+    // ---- 节点类型筛选复选框（按图谱中实际存在的类型动态生成） ----
+    function renderTypeFilter() {
+      const box = $('typeFilter');
+      if (!allGraph || !allGraph.nodes || !allGraph.nodes.length) {
+        box.innerHTML = '<div class="hint">暂无节点。</div>';
+        return;
+      }
+      const types = [...new Set(allGraph.nodes.map(n => n.type || n.group || 'Entity'))].sort();
+      // 空集合表示“全部类型”，因此默认全部勾选
+      box.innerHTML = types.map(t =>
+        `<label class="tfilter"><input type="checkbox" data-type="${escapeAttr(t)}" ${selectedTypes.size === 0 || selectedTypes.has(t) ? 'checked' : ''}/> ${escapeHtml(t)}</label>`
+      ).join('');
+    }
+
+    async function syncJobs() {
+      try {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        for (const j of data.jobs) {
+          const prev = jobs[j.job_id];
+          jobs[j.job_id] = j;
+          // 服务端任务由“构建中”变为终态时，刷新一次图谱（每任务仅一次）
+          if ((j.status === '完成' || j.status === '失败') && (!prev || prev.status === '构建中')) {
+            if (j.status === '完成') { await refreshGraph(); await refreshStats(); }
+          }
+        }
+        renderQueue();
+        maybeNext();
+      } catch (e) { /* 网络抖动时静默，下次轮询继续 */ }
+    }
+
+    function maybeNext() {
+      const anyRunning = Object.values(jobs).some(j => j.status === '构建中');
+      if (processing || anyRunning || !pending.length) return;
+      processNext();
+    }
+
+    async function processNext() {
+      if (!pending.length) { processing = false; return; }
+      processing = true;
+      const item = pending.shift();
+      const localId = item.localId;
+      // 本地排队项直接转为“构建中”同一行，避免重复
+      if (jobs[localId]) { jobs[localId].status = '构建中'; jobs[localId].message = '已提交，构建中...'; }
+      renderQueue();
+      try {
+        const fd = new FormData(); fd.append('file', item.f);
+        const res = await fetch('/api/build_file_job', { method: 'POST', body: fd });
+        const r = await res.json();
+        // 用服务端 job_id 接管同一行（localId 行删除，保证始终一条）
+        delete jobs[localId];
+        jobs[r.job_id] = { job_id: r.job_id, filename: r.filename, status: '构建中',
+                           message: '已提交，构建中...', cur: 0, total: 0 };
+        renderQueue();
+      } catch (e) {
+        if (jobs[localId]) { jobs[localId].status = '失败'; jobs[localId].error = String(e); }
+        renderQueue();
+      }
+      processing = false;
+      maybeNext();
+    }
+
+    $('uploadBtn').onclick = () => {
+      const files = Array.from($('fileInput').files || []);
+      if (!files.length) { $('status').textContent = '请先选择文件。'; return; }
+      for (const f of files) {
+        const localId = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        pending.push({ f, localId });
+        // 选中即作为一条任务进入队列（排队中），后续无缝转为服务端任务
+        jobs[localId] = { job_id: localId, filename: f.name, status: '排队中',
+                          message: '等待上传', cur: 0, total: 0 };
+      }
+      $('fileInput').value = '';
+      renderQueue();
+      maybeNext();
+    };
+
+    // 定时轮询：页面刷新后靠它把服务端任务“拉回”；构建中任务也会持续刷新进度。
+    setInterval(syncJobs, 600);
+    syncJobs();
+
+    $('resetBtn').onclick = async () => {
+      await fetch('/api/reset', { method:'POST' });
+      pending = []; jobs = {}; processing = false; selectedSources.clear();
+      $('input').value = '';
+      await refreshGraph(); await refreshStats();
+      renderQueue();
+      $('status').textContent = '已清空。';
+    };
+
+    $('queryBtn').onclick = async () => {
+      const q = $('queryInput').value.trim();
+      if (!q) return;
+      $('queryBtn').disabled = true;
+      const ans = $('answer');
+      ans.style.display = 'block';
+      ans.innerHTML = '<h4>问答结果</h4><div class="ctx">思考中...</div>';
+      try {
+        const res = await fetch('/api/query', { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ question: q }) });
+        let r = {};
+        try { r = await res.json(); } catch (_) { r = {}; }
+        if (!res.ok) {
+          const msg = r.detail || r.error || ('HTTP ' + res.status);
+          ans.innerHTML = `<h4>问答结果</h4><div class="ctx" style="color:#ff7b72">${escapeHtml(msg)}</div>`;
+          return;
+        }
+        let html = `<h4>问答结果</h4>${escapeHtml(r.answer || '（无结果）')}`;
+        if (r.graph_context) {
+          html += `<div class="ctx">关联图谱上下文：<br>${escapeHtml(r.graph_context)}</div>`;
+        }
+        if (r.contexts && r.contexts.length) {
+          html += `<div class="ctx">参考片段：<br>${r.contexts.slice(0,2).map(escapeHtml).join('<br><br>')}</div>`;
+        }
+        if (r.citations && r.citations.length) {
+          html += `<div class="ctx">引用来源：${r.citations.map(escapeHtml).join('；')}</div>`;
+        }
+        if (r.error) {
+          html += `<div class="ctx" style="color:#ff7b72">提示：${escapeHtml(r.error)}</div>`;
+        }
+        ans.innerHTML = html;
+      } catch (e) {
+        ans.innerHTML = `<h4>问答结果</h4><div class="ctx" style="color:#ff7b72">请求失败：${escapeHtml(String(e))}</div>`;
+      } finally { $('queryBtn').disabled = false; }
+    };
+
+    function setBusy(b) { $('buildBtn').disabled = b; $('uploadBtn').disabled = b; }
+    function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+    function escapeAttr(s) { return escapeHtml(s).replace(/"/g, '&quot;'); }
+
+    // ---- 删除：先停止任务，再删除对应所有入库数据（进行中 / 已完成均可） ----
+    $('queueList').addEventListener('click', async (e) => {
+      const btn = e.target.closest('.delBtn');
+      if (!btn) return;
+      const jobId = btn.dataset.job || '';
+      const source = btn.dataset.source || '';
+
+      // 本地待上传项（local_ 开头）：仅移出队列，服务端尚无数据
+      if (jobId.startsWith('local_')) {
+        if (!confirm(`确认移除待上传任务「${source || jobId}」？`)) return;
+        pending = pending.filter(p => p.localId !== jobId);
+        delete jobs[jobId];
+        renderQueue(); maybeNext();
+        return;
+      }
+
+      if (!confirm(`确认先停止该任务，并删除「${source}」对应的所有入库数据？此操作不可恢复。`)) return;
+      btn.disabled = true;
+      try {
+        // /api/delete_source 会先标记任务取消（停止），再清理图谱与向量数据
+        const res = await fetch('/api/delete_source', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source, job_id: jobId })
+        });
+        const r = await res.json();
+        selectedSources.delete(source);
+        if (jobs[jobId]) jobs[jobId].deleted = true;
+        await refreshGraph(); await refreshStats();
+        $('status').textContent =
+          `已停止任务并删除「${source}」的入库数据：节点 ${r.nodes ?? 0}，边 ${r.edges ?? 0}，向量 ${r.vectors_removed ?? 0}。`;
+      } catch (err) {
+        $('status').textContent = '删除失败: ' + err;
+      }
+      renderQueue();
+    });
+
+    // ---- 任务筛选：选中/取消某个已完成任务来源，实时刷新图谱 ----
+    $('taskFilter').addEventListener('change', (e) => {
+      const cb = e.target.closest('input[type="checkbox"]');
+      if (!cb) return;
+      const src = cb.dataset.source;
+      if (cb.checked) selectedSources.add(src); else selectedSources.delete(src);
+      drawFiltered();
+    });
+
+    $('clearFilterBtn').onclick = () => {
+      selectedSources.clear();
+      renderTaskFilter();
+      drawFiltered();
+    };
+
+    // ---- 节点类型筛选：勾选的类型实时决定图谱展示 ----
+    $('typeFilter').addEventListener('change', () => {
+      const checked = [...$('typeFilter').querySelectorAll('input:checked')].map(cb => cb.dataset.type);
+      selectedTypes = new Set(checked);
+      drawFiltered();
+    });
+
+    $('clearTypeBtn').onclick = () => {
+      selectedTypes.clear();   // 空集合 = 显示全部类型
+      renderTypeFilter();
+      drawFiltered();
+    };
+
+    refreshGraph(); refreshStats();
+  </script>
+</body>
+</html>

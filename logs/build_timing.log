@@ -1,0 +1,70 @@
+================================================================
+[2026-10-02T10:25:41.264401] build timing | source=nvidia_demo.txt | chunks=1
+  ExtractionAgent(实体/关系)        33.62s   55.4%
+  UnderstandingAgent(语义理解)      27.03s   44.5%
+  EmbeddingClient(向量)            0.05s    0.1%
+  GraphWriterAgent(写入)           0.00s    0.0%
+  ValidatorAgent(校验)             0.00s    0.0%
+  DataAgent(分块)                  0.00s    0.0%
+  SchemaAgent(Schema)            0.00s    0.0%
+  AGENT_WORK_TOTAL              60.71s
+  WALL_TOTAL                    60.72s
+  schema: {"node_types": ["Company", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "FOUNDED", "LEADS", "PART_OF", "USES"], "event_types": ["事件类型"], "entity_count": 19, "relation_count": 36, "event_count": 57, "type_aliases": {"NVIDIA": ["公司", "半导体公司"]}}
+  stats : {"backend": "NetworkXStore", "node_count": 37, "edge_count": 57, "node_types": ["Company", "Event", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "EVENT_OBJECT", "EVENT_SUBJECT", "FOUNDED", "LEADS", "PART_OF", "USES"]}
+
+================================================================
+[2026-10-02T10:27:06.515555] build timing | source=demo | chunks=1
+  ExtractionAgent(实体/关系)        34.28s   55.4%
+  UnderstandingAgent(语义理解)      27.57s   44.5%
+  EmbeddingClient(向量)            0.03s    0.1%
+  ValidatorAgent(校验)             0.00s    0.0%
+  GraphWriterAgent(写入)           0.00s    0.0%
+  DataAgent(分块)                  0.00s    0.0%
+  SchemaAgent(Schema)            0.00s    0.0%
+  AGENT_WORK_TOTAL              61.89s
+  WALL_TOTAL                    61.89s
+  schema: {"node_types": ["Company", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "FOUNDED", "LEADS", "PART_OF", "USES"], "event_types": ["事件类型"], "entity_count": 19, "relation_count": 36, "event_count": 57, "type_aliases": {"NVIDIA": ["公司", "半导体公司"]}}
+  stats : {"backend": "NetworkXStore", "node_count": 37, "edge_count": 57, "node_types": ["Company", "Event", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "EVENT_OBJECT", "EVENT_SUBJECT", "FOUNDED", "LEADS", "PART_OF", "USES"]}
+
+================================================================
+[2026-10-02T10:27:14.731694] build timing | source=t | chunks=5
+  EmbeddingClient(向量)            0.00s   33.8%
+  ExtractionAgent(实体/关系)         0.00s   25.1%
+  DataAgent(分块)                  0.00s   16.3%
+  ValidatorAgent(校验)             0.00s   10.3%
+  GraphWriterAgent(写入)           0.00s    8.0%
+  UnderstandingAgent(语义理解)       0.00s    5.5%
+  SchemaAgent(Schema)            0.00s    1.0%
+  AGENT_WORK_TOTAL               0.00s
+  WALL_TOTAL                     0.01s
+  schema: {"node_types": ["Company", "Person", "Product"], "relation_types": ["PRODUCES"], "event_types": ["RELEASE"], "entity_count": 3, "relation_count": 1, "event_count": 5, "type_aliases": {"nvidia": ["NVIDIA"]}}
+  stats : {"backend": "NetworkXStore", "node_count": 4, "edge_count": 2, "node_types": ["Company", "Event", "Person", "Product"], "relation_types": ["EVENT_SUBJECT", "PRODUCES"]}
+
+================================================================
+[2026-10-02T10:27:14.742674] build timing | source=t | chunks=5
+  EmbeddingClient(向量)            0.00s   31.0%
+  ExtractionAgent(实体/关系)         0.00s   29.8%
+  DataAgent(分块)                  0.00s   12.7%
+  ValidatorAgent(校验)             0.00s   10.7%
+  UnderstandingAgent(语义理解)       0.00s    7.4%
+  GraphWriterAgent(写入)           0.00s    7.3%
+  SchemaAgent(Schema)            0.00s    1.0%
+  AGENT_WORK_TOTAL               0.00s
+  WALL_TOTAL                     0.01s
+  schema: {"node_types": ["Company", "Person", "Product"], "relation_types": ["PRODUCES"], "event_types": ["RELEASE"], "entity_count": 3, "relation_count": 1, "event_count": 5, "type_aliases": {"nvidia": ["NVIDIA"]}}
+  stats : {"backend": "NetworkXStore", "node_count": 4, "edge_count": 2, "node_types": ["Company", "Event", "Person", "Product"], "relation_types": ["EVENT_SUBJECT", "PRODUCES"]}
+
+================================================================
+[2026-10-02T10:34:39.090570] build timing | source=揭秘与人相处的24条黄金法则.txt | chunks=2
+  ExtractionAgent(实体/关系)       304.01s   86.7%
+  UnderstandingAgent(语义理解)      46.45s   13.2%
+  EmbeddingClient(向量)            0.11s    0.0%
+  ValidatorAgent(校验)             0.00s    0.0%
+  GraphWriterAgent(写入)           0.00s    0.0%
+  DataAgent(分块)                  0.00s    0.0%
+  SchemaAgent(Schema)            0.00s    0.0%
+  AGENT_WORK_TOTAL             350.58s
+  WALL_TOTAL                   175.43s
+  schema: {"node_types": ["Concept"], "relation_types": ["PART_OF", "RELATED_TO", "USES"], "event_types": ["事件类型"], "entity_count": 11, "relation_count": 12, "event_count": 2, "type_aliases": {"24条黄金法则": ["24 Golden Rules"], "鼓励": ["encourage"], "尊重": ["respect"], "倾听": ["listen"], "宽容": ["tolerance"], "道歉": ["apologize"], "谦虚": ["humility"]}}
+  stats : {"backend": "NetworkXStore", "node_count": 50, "edge_count": 73, "node_types": ["Company", "Concept", "Event", "Person", "Product", "Technology"], "relation_types": ["CAUSES", "COLLABORATES_WITH", "EVENT_OBJECT", "EVENT_SUBJECT", "FOUNDED", "LEADS", "PART_OF", "RELATED_TO", "USES"]}
+

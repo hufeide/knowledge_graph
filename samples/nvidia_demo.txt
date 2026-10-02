@@ -1,0 +1,11 @@
+NVIDIA 是一家总部位于美国的半导体公司，由黄仁勋（Jensen Huang）于 1993 年创立。NVIDIA 在 1999 年推出了全球首款 GPU GeForce 256，开启了图形计算的时代。
+
+2020 年，NVIDIA 发布了 Ampere 架构，并推出 RTX 30 系列显卡，其中 RTX 3090 面向高端玩家与创作者。2022 年，NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列，RTX 4090 成为当时的旗舰显卡。
+
+NVIDIA 不仅生产消费级显卡，也为数据中心提供加速计算芯片，例如 A100 与 H100。H100 基于 Hopper 架构，广泛用于大模型训练与推理。
+
+2023 年，NVIDIA 发布了新一代 Hopper 架构加速器 H200，进一步提升了显存容量。2024 年，NVIDIA 推出 Blackwell 架构，B200 芯片成为新一代旗舰，并用于构建 DGX 超级计算机。
+
+OpenAI 在 2023 年 3 月发布了 GPT-4 多模态大模型，其训练与推理大量使用 NVIDIA 的 GPU。Microsoft 是 OpenAI 的重要投资方，并与 NVIDIA 在云计算领域保持合作。
+
+CUDA 是 NVIDIA 推出的并行计算平台，开发者可以通过 CUDA 在 GPU 上编写高性能程序，它是 NVIDIA 生态的核心壁垒之一。

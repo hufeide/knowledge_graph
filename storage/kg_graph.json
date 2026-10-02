@@ -1,0 +1,1474 @@
+{
+  "nodes": [
+    {
+      "id": "NVIDIA",
+      "props": {
+        "name": "NVIDIA",
+        "type": "Company",
+        "description": "总部位于美国的半导体公司",
+        "aliases": [
+          "公司",
+          "半导体公司"
+        ],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "黄仁勋",
+      "props": {
+        "name": "黄仁勋",
+        "type": "Person",
+        "description": "NVIDIA 创始人",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "Jensen Huang",
+      "props": {
+        "name": "Jensen Huang",
+        "type": "Person",
+        "description": "黄仁勋的英文名",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "NVIDIA GeForce 256",
+      "props": {
+        "name": "NVIDIA GeForce 256",
+        "type": "Product",
+        "description": "全球首款 GPU",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "Ampere 架构",
+      "props": {
+        "name": "Ampere 架构",
+        "type": "Technology",
+        "description": "2020 年推出的架构",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "RTX 30 系列",
+      "props": {
+        "name": "RTX 30 系列",
+        "type": "Product",
+        "description": "2020 年推出的显卡系列",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "RTX 3090",
+      "props": {
+        "name": "RTX 3090",
+        "type": "Product",
+        "description": "面向高端玩家与创作者的显卡",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "Ada Lovelace 架构",
+      "props": {
+        "name": "Ada Lovelace 架构",
+        "type": "Technology",
+        "description": "2022 年推出的架构",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "RTX 40 系列",
+      "props": {
+        "name": "RTX 40 系列",
+        "type": "Product",
+        "description": "2022 年推出的 RTX 40 系列",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "RTX 4090",
+      "props": {
+        "name": "RTX 4090",
+        "type": "Product",
+        "description": "RTX 40 系列旗舰显卡",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "Hopper 架构",
+      "props": {
+        "name": "Hopper 架构",
+        "type": "Technology",
+        "description": "H100 基于的架构",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "H200",
+      "props": {
+        "name": "H200",
+        "type": "Product",
+        "description": "2023 年推出的新一代 H200",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "H100",
+      "props": {
+        "name": "H100",
+        "type": "Product",
+        "description": "基于 Hopper 架构的芯片",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "Blackwell 架构",
+      "props": {
+        "name": "Blackwell 架构",
+        "type": "Technology",
+        "description": "2024 年推出的架构",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "B200 芯片",
+      "props": {
+        "name": "B200 芯片",
+        "type": "Product",
+        "description": "Blackwell 架构的新一代旗舰",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "DGX 超级计算机",
+      "props": {
+        "name": "DGX 超级计算机",
+        "type": "Product",
+        "description": "Blackwell 架构用于构建的超级计算机",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "CUDA",
+      "props": {
+        "name": "CUDA",
+        "type": "Technology",
+        "description": "并行计算平台，核心壁垒",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "OpenAI",
+      "props": {
+        "name": "OpenAI",
+        "type": "Company",
+        "description": "与 NVIDIA 保持合作的企业",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "Microsoft",
+      "props": {
+        "name": "Microsoft",
+        "type": "Company",
+        "description": "OpenAI 的重要投资方",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::2cecc814bf5b",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 发布 H100 芯片，基于 Hopper 架构，用于大模型训练与推理",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "H100 芯片",
+        "time": "2023 年",
+        "summary": "NVIDIA 发布 H100 芯片，基于 Hopper 架构，用于大模型训练与推理",
+        "description": "NVIDIA 发布 H100 芯片，基于 Hopper 架构，用于大模型训练与推理",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::8e50a022364f",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 发布 H200 芯片，进一步提升了显存容量",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "H200 芯片",
+        "time": "2023 年",
+        "summary": "NVIDIA 发布 H200 芯片，进一步提升了显存容量",
+        "description": "NVIDIA 发布 H200 芯片，进一步提升了显存容量",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::9b91bca45d39",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 Blackwell 架构，B200 芯片成为新一代旗舰",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "Blackwell 架构",
+        "time": "2024 年",
+        "summary": "NVIDIA 推出 Blackwell 架构，B200 芯片成为新一代旗舰",
+        "description": "NVIDIA 推出 Blackwell 架构，B200 芯片成为新一代旗舰",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::7c62b5f05c56",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 RTX 30 系列显卡，开启图形计算时代",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RTX 30 系列显卡",
+        "time": "2020 年",
+        "summary": "NVIDIA 推出 RTX 30 系列显卡，开启图形计算时代",
+        "description": "NVIDIA 推出 RTX 30 系列显卡，开启图形计算时代",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::185d74e4c6c8",
+      "props": {
+        "kind": "event",
+        "name": "CUDA 是 NVIDIA 推出的并行计算平台，是生态核心壁垒",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "CUDA 平台",
+        "time": "通用",
+        "summary": "CUDA 是 NVIDIA 推出的并行计算平台，是生态核心壁垒",
+        "description": "CUDA 是 NVIDIA 推出的并行计算平台，是生态核心壁垒",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::78d265559661",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "Hopper 架构",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列",
+        "description": "NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::c6e06e654b25",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 发布新一代 Hopper 架构加速器 H200",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "H200 芯片",
+        "time": "2023 年",
+        "summary": "NVIDIA 发布新一代 Hopper 架构加速器 H200",
+        "description": "NVIDIA 发布新一代 Hopper 架构加速器 H200",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::422d835e1079",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出基于 Hopper 架构的 H100 芯片",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "H100 芯片",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出基于 Hopper 架构的 H100 芯片",
+        "description": "NVIDIA 推出基于 Hopper 架构的 H100 芯片",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::c7c5673df380",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RTX 40 系列显卡",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列",
+        "description": "NVIDIA 推出基于 Ada Lovelace 架构的 RTX 40 系列",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::277806c19d31",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出面向高端玩家与创作者的 RTX 3090",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RTX 3090 显卡",
+        "time": "2020 年",
+        "summary": "NVIDIA 推出面向高端玩家与创作者的 RTX 3090",
+        "description": "NVIDIA 推出面向高端玩家与创作者的 RTX 3090",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::2213c90ddbd0",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 RTX 30 系列显卡",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RTX 30 系列显卡",
+        "time": "2020 年",
+        "summary": "NVIDIA 推出 RTX 30 系列显卡",
+        "description": "NVIDIA 推出 RTX 30 系列显卡",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::85910e5115e0",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 A100 芯片，用于数据中心加速计算",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "A100 芯片",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出 A100 芯片，用于数据中心加速计算",
+        "description": "NVIDIA 推出 A100 芯片，用于数据中心加速计算",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::17b2d4740cb8",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 RTX 4090 成为当时的旗舰显卡",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RTX 4090 显卡",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出 RTX 4090 成为当时的旗舰显卡",
+        "description": "NVIDIA 推出 RTX 4090 成为当时的旗舰显卡",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::a422bf0ca06b",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 H100 芯片，用于大模型训练与推理",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "H100 芯片",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出 H100 芯片，用于大模型训练与推理",
+        "description": "NVIDIA 推出 H100 芯片，用于大模型训练与推理",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::ca5a88cd2d9b",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 发布 H200 芯片，进一步提升显存容量",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "H200 芯片",
+        "time": "2023 年",
+        "summary": "NVIDIA 发布 H200 芯片，进一步提升显存容量",
+        "description": "NVIDIA 发布 H200 芯片，进一步提升显存容量",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::c783d5386cda",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 Hopper 架构，用于大模型训练与推理",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "Hopper 架构",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出 Hopper 架构，用于大模型训练与推理",
+        "description": "NVIDIA 推出 Hopper 架构，用于大模型训练与推理",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::9f94e4bf884c",
+      "props": {
+        "kind": "event",
+        "name": "NVIDIA 推出 RTX 40 系列显卡",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RTX 40 系列显卡",
+        "time": "2022 年",
+        "summary": "NVIDIA 推出 RTX 40 系列显卡",
+        "description": "NVIDIA 推出 RTX 40 系列显卡",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "event::ce6abd766bbc",
+      "props": {
+        "kind": "event",
+        "name": "事件类型: NVIDIA→RT",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "NVIDIA",
+        "object": "RT",
+        "time": "",
+        "summary": "",
+        "description": "",
+        "aliases": [],
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "24条黄金法则",
+      "props": {
+        "name": "24条黄金法则",
+        "type": "Concept",
+        "description": "关于与人相处的24条核心建议",
+        "aliases": [
+          "24 Golden Rules"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "鼓励",
+      "props": {
+        "name": "鼓励",
+        "type": "Concept",
+        "description": "称赞他人获得成果",
+        "aliases": [
+          "encourage"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "尊重",
+      "props": {
+        "name": "尊重",
+        "type": "Concept",
+        "description": "让别人保留脸面",
+        "aliases": [
+          "respect"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "倾听",
+      "props": {
+        "name": "倾听",
+        "type": "Concept",
+        "description": "当别人发怒时给予同情",
+        "aliases": [
+          "listen"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "宽容",
+      "props": {
+        "name": "宽容",
+        "type": "Concept",
+        "description": "执行法则的必备前提：宽恕他人",
+        "aliases": [
+          "tolerance"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1",
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "道歉",
+      "props": {
+        "name": "道歉",
+        "type": "Concept",
+        "description": "犯错时及时道歉",
+        "aliases": [
+          "apologize"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "谦虚",
+      "props": {
+        "name": "谦虚",
+        "type": "Concept",
+        "description": "戒骄戒躁",
+        "aliases": [
+          "humility"
+        ],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "id": "寻找让别人快乐的途径",
+      "props": {
+        "name": "寻找让别人快乐的途径",
+        "type": "Concept",
+        "description": "核心原则：寻求他人快乐",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "保持微笑",
+      "props": {
+        "name": "保持微笑",
+        "type": "Concept",
+        "description": "行为准则：微笑表示尊重与友好",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "24条法则",
+      "props": {
+        "name": "24条法则",
+        "type": "Concept",
+        "description": "核心原则：执行宽容与宽恕的法则",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "植物浇水",
+      "props": {
+        "name": "植物浇水",
+        "type": "Concept",
+        "description": "比喻：给予他人所需的东西",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::7a1486882a25",
+      "props": {
+        "kind": "event",
+        "name": "文本开篇提出寻找让别人快乐的途径。",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "寻找让别人快乐的途径",
+        "object": "寻找让别人快乐的途径",
+        "time": "文本开始",
+        "summary": "文本开篇提出寻找让别人快乐的途径。",
+        "description": "文本开篇提出寻找让别人快乐的途径。",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "id": "event::7e4b42669940",
+      "props": {
+        "kind": "event",
+        "name": "保持微笑。",
+        "type": "Event",
+        "event_type": "事件类型",
+        "subject": "保持微笑",
+        "object": "保持微笑",
+        "time": "文本开始",
+        "summary": "保持微笑。",
+        "description": "保持微笑。",
+        "aliases": [],
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "NVIDIA",
+      "target": "黄仁勋",
+      "props": {
+        "type": "FOUNDED",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Jensen Huang",
+      "props": {
+        "type": "LEADS",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "NVIDIA GeForce 256",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "NVIDIA GeForce 256",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Ampere 架构",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 30 系列",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 30 系列",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 3090",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 3090",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Ada Lovelace 架构",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 40 系列",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 40 系列",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 4090",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "RTX 4090",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Hopper 架构",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Hopper 架构",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Hopper 架构",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "H200",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "H200",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "H200",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "B200 芯片",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "B200 芯片",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "B200 芯片",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "DGX 超级计算机",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "DGX 超级计算机",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "DGX 超级计算机",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "H100",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "H100",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "H100",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Blackwell 架构",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Blackwell 架构",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Blackwell 架构",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "CUDA",
+      "props": {
+        "type": "CAUSES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "CUDA",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "OpenAI",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "Microsoft",
+      "props": {
+        "type": "COLLABORATES_WITH",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::2cecc814bf5b",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::8e50a022364f",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::9b91bca45d39",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::7c62b5f05c56",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::185d74e4c6c8",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::78d265559661",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::c6e06e654b25",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::422d835e1079",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::c7c5673df380",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::277806c19d31",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::2213c90ddbd0",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::85910e5115e0",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::17b2d4740cb8",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::a422bf0ca06b",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::ca5a88cd2d9b",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::c783d5386cda",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::9f94e4bf884c",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "NVIDIA",
+      "target": "event::ce6abd766bbc",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "event::9b91bca45d39",
+      "target": "Blackwell 架构",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "event::78d265559661",
+      "target": "Hopper 架构",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "event::c783d5386cda",
+      "target": "Hopper 架构",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "nvidia_demo.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "24条黄金法则",
+      "props": {
+        "type": "PART_OF",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "鼓励",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "尊重",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "倾听",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "宽容",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "道歉",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "24条黄金法则",
+      "target": "谦虚",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-1"
+        ]
+      }
+    },
+    {
+      "source": "寻找让别人快乐的途径",
+      "target": "保持微笑",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "寻找让别人快乐的途径",
+      "target": "宽容",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "寻找让别人快乐的途径",
+      "target": "24条法则",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "寻找让别人快乐的途径",
+      "target": "24条法则",
+      "props": {
+        "type": "RELATED_TO",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "寻找让别人快乐的途径",
+      "target": "植物浇水",
+      "props": {
+        "type": "USES",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "寻找让别人快乐的途径",
+      "target": "event::7a1486882a25",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "保持微笑",
+      "target": "event::7e4b42669940",
+      "props": {
+        "type": "EVENT_SUBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::7a1486882a25",
+      "target": "寻找让别人快乐的途径",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    },
+    {
+      "source": "event::7e4b42669940",
+      "target": "保持微笑",
+      "props": {
+        "type": "EVENT_OBJECT",
+        "sources": [
+          "揭秘与人相处的24条黄金法则.txt-2"
+        ]
+      }
+    }
+  ]
+}
